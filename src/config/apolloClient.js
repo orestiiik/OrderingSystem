@@ -4,7 +4,7 @@ import { getCookie } from 'cookies-next';
 
 const apolloClient = new ApolloClient({
     link: createHttpLink({
-        uri: 'https://localhost:4000/graphql',
+        uri: 'https://ordering-system-be.vercel.app/graphql',
     }),
     cache: new InMemoryCache({
         addTypename: false,
@@ -23,7 +23,7 @@ const apolloClient = new ApolloClient({
 
 export function createApolloClient(token) {
     const httpLink = createHttpLink({
-        uri: 'https://localhost:4000/graphql',
+        uri: 'https://ordering-system-be.vercel.app/graphql',
         credentials: 'include',
     });
 

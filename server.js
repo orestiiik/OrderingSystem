@@ -10,16 +10,6 @@ const httpsOptions = {
 }
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-const proxy = httpProxy.createProxyServer({
-    ssl: httpsOptions,
-    target: {
-        protocol: 'https:',
-        host: 'ordering-system-be.vercel.app/',
-        ca: fs.readFileSync('tls/localhost.pem'),
-    },
-    secure: true,
-})
-
 const dev = process.env.NODE_ENV !== 'production'
 
 const app = next({dev})
@@ -32,7 +22,6 @@ app.prepare().then(() => {
 
         if (parsedUrl.path.startsWith('/api')) {
             req.url = req.url.substring(4) // Remove /api from beginning
-            proxy.web(req, res)
         } else {
             handle(req, res, parsedUrl)
         }
