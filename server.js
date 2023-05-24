@@ -14,11 +14,10 @@ const proxy = httpProxy.createProxyServer({
     ssl: httpsOptions,
     target: {
         protocol: 'https:',
-        host: 'localhost',
-        port: 4000,
+        host: 'ordering-system-be.vercel.app/',
         ca: fs.readFileSync('tls/localhost.pem'),
     },
-    secure: false,
+    secure: true,
 })
 
 const dev = process.env.NODE_ENV !== 'production'

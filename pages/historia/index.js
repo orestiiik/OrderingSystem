@@ -16,7 +16,6 @@ export default function Index(props) {
     const [defaultValues, setDefaultValues] = useState(undefined)
     const [deleteSale] = useMutation(DELETE_SALE)
     const {loading, error, data, refetch} = useQuery(GET_SALES, {
-        pollInterval: 20000,
         variables: {
             active: false,
         },
