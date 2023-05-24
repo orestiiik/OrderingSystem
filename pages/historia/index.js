@@ -51,7 +51,6 @@ export default function Index(props) {
                         }}
                     >
                         {data?.getSales?.map((sale) => {
-                            console.log(sale)
                             return (
                                 <Grid
                                     item

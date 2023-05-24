@@ -1,4 +1,4 @@
-import {Box, Button, Grid, TextField, Typography} from '@mui/material'
+import {Box, Button, CircularProgress, Grid, TextField, Typography} from '@mui/material'
 import {LOGIN_USER} from '../src/gql/user'
 import {Controller, useForm} from 'react-hook-form'
 import * as React from 'react'
@@ -11,7 +11,7 @@ import UserContext from '../src/context/UserContext'
 export default function Index(props) {
     const {handleSubmit, control} = useForm()
     const router = useRouter()
-    const [loginUser] = useMutation(LOGIN_USER)
+    const [loginUser, {data, loading, error}] = useMutation(LOGIN_USER)
     const {setUser} = useContext(UserContext)
     const onSubmit = async (data) => {
         try {
@@ -142,17 +142,28 @@ export default function Index(props) {
                                 xs={12}
                                 pb={1}
                             >
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    type={'submit'}
-                                    sx={{
-                                        fontWeight: 600,
-                                        fontSize: 18,
-                                    }}
-                                >
-                                    Prihlásiť sa
-                                </Button>
+                                {loading
+                                    ? <CircularProgress />
+                                    :
+                                    <>
+                                        {error &&
+                                            <Typography color={'red'}>
+                                                Zlé prihlasovacie údaje
+                                            </Typography>
+                                        }
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            type={'submit'}
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: 18,
+                                            }}
+                                        >
+                                            Prihlásiť sa
+                                        </Button>
+                                    </>
+                                }
                             </Grid>
                         </Grid>
                     </form>

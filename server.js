@@ -2,7 +2,6 @@ const {createServer} = require('https')
 const {parse} = require('url')
 const next = require('next')
 const fs = require('fs')
-const httpProxy = require('http-proxy')
 
 const httpsOptions = {
     key: fs.readFileSync('tls/localhost-key.pem'),
