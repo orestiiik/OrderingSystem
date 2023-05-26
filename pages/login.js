@@ -29,6 +29,7 @@ export default function Index(props) {
                     token,
                     {
                         path: '/',
+                        maxAge: 36000
                     },
                 )
                 router.push('/')
@@ -86,6 +87,18 @@ export default function Index(props) {
                                 background: 'white',
                             }}
                         >
+                            <Grid
+                                item
+                                xs={12}
+                            >
+                                <Typography
+                                    fontSize={22}
+                                    pb={2}
+                                >
+                                    username: admin <br/>
+                                    password: admin123
+                                </Typography>
+                            </Grid>
                             <Grid
                                 item
                                 xs={12}
