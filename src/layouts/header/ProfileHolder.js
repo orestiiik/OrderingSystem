@@ -46,6 +46,14 @@ const ProfileHolder = (props) => {
                     >
                         {user.data.firstName}
                     </Typography>
+                    <Typography
+                        color="textMuted"
+                        variant="h5"
+                        fontWeight="300"
+                        sx={{ml: 1}}
+                    >
+                        {user.data.lastName.slice(0,2)}.
+                    </Typography>
                     <Box
                         p={1}
                         ml={2}

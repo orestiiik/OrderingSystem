@@ -1,11 +1,11 @@
 import {
-    IconHome,
-    IconFileStack,
-    IconMeat,
     IconCheckupList,
+    IconClock,
+    IconFileStack,
+    IconFridge,
+    IconHome,
+    IconMeat,
     IconUsers,
-    IconShield,
-    IconUsersGroup, IconClock,
 } from '@tabler/icons-react'
 
 const IconStyle = {
@@ -48,6 +48,15 @@ export const Menuitems = [
             strokeWidth={1.5}
         />,
         href: '/kategorie',
+    },
+    {
+        title: 'Ingrediencie',
+        icon: <IconFridge
+            style={IconStyle}
+            size={26}
+            strokeWidth={1.5}
+        />,
+        href: '/ingrediencie',
     },
     {
         title: 'Ponuka',

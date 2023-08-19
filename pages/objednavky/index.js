@@ -49,174 +49,177 @@ export default function Index(props) {
                         container
                         spacing={3}
                     >
-                        {data?.getSales?.map((sale) => {
-                            console.log(sale)
-                            return (
-                                <Grid
-                                    item
-                                    xs={12}
-                                    md={4}
-                                    lg={3}
-                                    key={sale.id}
-                                    px={1}
-                                >
-                                    <Box
-                                        sx={{
-                                            position: 'relative',
-                                            boxShadow: 3,
-                                            borderRadius: 3,
-                                            px: 2,
-                                            py: 1.5,
-                                            width: '100%',
-                                            height: '100%',
-                                            minWidth: 250,
-                                        }}
+                        {data?.getSales?.length !== 0
+                            ? data?.getSales.map((sale) => {
+                                return (
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        md={4}
+                                        lg={3}
+                                        key={sale.id}
+                                        px={1}
                                     >
                                         <Box
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'space-between'}
-                                            width={'100%'}
-                                            py={.5}
+                                            sx={{
+                                                position: 'relative',
+                                                boxShadow: 3,
+                                                borderRadius: 3,
+                                                px: 2,
+                                                py: 1.5,
+                                                width: '100%',
+                                                height: '100%',
+                                                minWidth: 250,
+                                            }}
                                         >
-                                            <IconReceipt size={20} />
+                                            <Box
+                                                display={'flex'}
+                                                alignItems={'center'}
+                                                justifyContent={'space-between'}
+                                                width={'100%'}
+                                                py={.5}
+                                            >
+                                                <IconReceipt size={20} />
+                                                <Typography
+                                                    fontWeight={600}
+                                                    fontSize={22}
+                                                >
+                                                    {sale.data.price}&nbsp;€
+                                                </Typography>
+                                            </Box>
+                                            <Divider variant={'fullWidth'} />
                                             <Typography
                                                 fontWeight={600}
-                                                fontSize={22}
+                                                pt={2}
+                                                pb={1}
+                                                fontSize={20}
                                             >
-                                                {sale.data.price}&nbsp;€
+                                                Objednávka
                                             </Typography>
-                                        </Box>
-                                        <Divider variant={'fullWidth'} />
-                                        <Typography
-                                            fontWeight={600}
-                                            pt={2}
-                                            pb={1}
-                                            fontSize={20}
-                                        >
-                                            Objednávka
-                                        </Typography>
-                                        <Box>
-                                            {sale?.data?.order?.map(order => {
-                                                    return (
-                                                        <Box key={order.category.data.name}>
-                                                            <Typography
-                                                                fontWeight={600}
-                                                                fontSize={18}
-                                                            >
-                                                                {order.category.data.name}
-                                                            </Typography>
-                                                            <Divider variant={'fullWidth'} />
-                                                            <Box sx={{pl: 2, py: .5}}>
-                                                                {order.items.map((item, index) => {
-                                                                    return <Box
-                                                                        key={index}
-                                                                        display={'flex'}
-                                                                        justifyContent={'space-between'}
-                                                                        width={'100%'}
-                                                                    >
-                                                                        <Box>
-                                                                            <Typography fontSize={16}>
-                                                                                {item.quantity}x&nbsp;
-                                                                                {item.name}
+                                            <Box>
+                                                {sale?.data?.order?.map(order => {
+                                                        return (
+                                                            <Box key={order.category.data.name}>
+                                                                <Typography
+                                                                    fontWeight={600}
+                                                                    fontSize={18}
+                                                                >
+                                                                    {order.category.data.name}
+                                                                </Typography>
+                                                                <Divider variant={'fullWidth'} />
+                                                                <Box sx={{pl: 2, py: .5}}>
+                                                                    {order.items.map((item, index) => {
+                                                                        return <Box
+                                                                            key={index}
+                                                                            display={'flex'}
+                                                                            justifyContent={'space-between'}
+                                                                            width={'100%'}
+                                                                        >
+                                                                            <Box>
+                                                                                <Typography fontSize={16}>
+                                                                                    {item.quantity}x&nbsp;
+                                                                                    {item.name}
+                                                                                </Typography>
+                                                                            </Box>
+                                                                            <Typography>
+                                                                                {item.weight} {item.liquid ? ' ml' : ' g'}
                                                                             </Typography>
                                                                         </Box>
+                                                                    })}
+                                                                </Box>
+                                                                <Divider variant={'fullWidth'} />
+                                                                <Box py={1}>
+                                                                    <Box
+                                                                        display={'flex'}
+                                                                        alignItems={'center'}
+                                                                        gap={1}
+                                                                        py={.2}
+                                                                    >
+                                                                        <IconAddressBook size={15} />
                                                                         <Typography>
-                                                                            {item.weight} {item.liquid ? ' ml' : ' g'}
+                                                                            {sale.data.address.city},&nbsp;
+                                                                            {sale.data.address.street}
                                                                         </Typography>
                                                                     </Box>
-                                                                })}
+                                                                    <Box
+                                                                        display={'flex'}
+                                                                        alignItems={'center'}
+                                                                        gap={1}
+                                                                        py={.2}
+                                                                    >
+                                                                        <IconId size={15} />
+                                                                        <Typography>
+                                                                            {sale.data.person.fullName}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                    <Box
+                                                                        display={'flex'}
+                                                                        alignItems={'center'}
+                                                                        gap={1}
+                                                                        py={.2}
+                                                                    >
+                                                                        <IconPhone size={15} />
+                                                                        <Typography>
+                                                                            <b>
+                                                                                {sale.data.person.telephone}
+                                                                            </b>
+                                                                        </Typography>
+                                                                    </Box>
+                                                                    {sale.data.address.note.length !== 0 &&
+                                                                        <Typography pt={.5}>
+                                                                            <b>Poznámka</b>
+                                                                            <br />
+                                                                            {sale.data.address.note}
+                                                                        </Typography>
+                                                                    }
+                                                                </Box>
                                                             </Box>
-                                                            <Divider variant={'fullWidth'} />
-                                                            <Box py={1}>
-                                                                <Box
-                                                                    display={'flex'}
-                                                                    alignItems={'center'}
-                                                                    gap={1}
-                                                                    py={.2}
-                                                                >
-                                                                    <IconAddressBook size={15} />
-                                                                    <Typography>
-                                                                        {sale.data.address.city},&nbsp;
-                                                                        {sale.data.address.street}
-                                                                    </Typography>
-                                                                </Box>
-                                                                <Box
-                                                                    display={'flex'}
-                                                                    alignItems={'center'}
-                                                                    gap={1}
-                                                                    py={.2}
-                                                                >
-                                                                    <IconId size={15} />
-                                                                    <Typography>
-                                                                        {sale.data.person.fullName}
-                                                                    </Typography>
-                                                                </Box>
-                                                                <Box
-                                                                    display={'flex'}
-                                                                    alignItems={'center'}
-                                                                    gap={1}
-                                                                    py={.2}
-                                                                >
-                                                                    <IconPhone size={15} />
-                                                                    <Typography>
-                                                                        <b>
-                                                                            {sale.data.person.telephone}
-                                                                        </b>
-                                                                    </Typography>
-                                                                </Box>
-                                                                {sale.data.address.note.length !== 0 &&
-                                                                    <Typography pt={.5}>
-                                                                        <b>Poznámka</b>
-                                                                        <br />
-                                                                        {sale.data.address.note}
-                                                                    </Typography>
-                                                                }
-                                                            </Box>
-                                                        </Box>
-                                                    )
-                                                },
-                                            )
+                                                        )
+                                                    },
+                                                )
+                                                }
+                                            </Box>
+                                            {!sale.data.done &&
+                                                <>
+                                                    <Box
+                                                        sx={{
+                                                            mb: '50px',
+                                                        }}
+                                                    />
+                                                    <Box
+                                                        position={'absolute'}
+                                                        bottom={10}
+                                                        right={10}
+                                                        onClick={() => {
+                                                            updateStatus({variables: {id: sale.id}})
+                                                            refetch()
+                                                        }}
+                                                        sx={{
+                                                            background: 'green',
+                                                            borderRadius: '100%',
+                                                            width: 40,
+                                                            height: 40,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <IconCheck
+                                                            size={30}
+                                                            color={'white'}
+                                                        />
+                                                    </Box>
+                                                </>
                                             }
                                         </Box>
-                                        {!sale.data.done &&
-                                            <>
-                                                <Box
-                                                    sx={{
-                                                        mb: '50px',
-                                                    }}
-                                                />
-                                                <Box
-                                                    position={'absolute'}
-                                                    bottom={10}
-                                                    right={10}
-                                                    onClick={() => {
-                                                        updateStatus({variables: {id: sale.id}})
-                                                        refetch()
-                                                    }}
-                                                    sx={{
-                                                        background: 'green',
-                                                        borderRadius: '100%',
-                                                        width: 40,
-                                                        height: 40,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <IconCheck
-                                                        size={30}
-                                                        color={'white'}
-                                                    />
-                                                </Box>
-                                            </>
-                                        }
-                                    </Box>
 
-                                </Grid>
-                            )
-                        })}
+                                    </Grid>
+                                )
+                            }) : <Typography p={2}>
+                                Neboli nájdené žiadne objednávky
+                            </Typography>
+                        }
                     </Grid>
                 </BgCard>
             </Grid>
