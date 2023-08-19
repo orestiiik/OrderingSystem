@@ -1,45 +1,21 @@
-import {
-    Autocomplete,
-    Box,
-    Grid,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    TextField,
-    Typography,
-} from '@mui/material'
+import {Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography} from '@mui/material'
 import {createApolloClient} from '../../src/config/apolloClient'
 import BgCard from '../../src/components/baseCard/BgCard'
-import React, {useMemo, useState} from 'react'
+import React, {useState} from 'react'
 import StyledTableCell from '../../src/components/table/TableCell'
 import CreateNewButton from '../../src/components/table/CreateNewButton'
-import {useMutation, useQuery} from '@apollo/client'
+import {useMutation} from '@apollo/client'
 import {useRouter} from 'next/router'
 import ActionButtons from '../../src/components/table/ActionButtons'
 import {withAuthentication} from '../../src/user/auth'
-import {DELETE_ITEM, GET_ITEMS} from '../../src/gql/items'
-import ItemFormDialog from '../../src/components/items/FormDialog'
-import {StateChip} from '../../src/config/states'
-import {GET_CATEGORIES} from '../../src/gql/category'
+import {DELETE_INGREDIENT, GET_INGREDIENTS} from '../../src/gql/igredients'
+import IngredientFormDialog from '../../src/components/ingredients/FormDialog'
 
 export default function Index(props) {
     const router = useRouter()
     const [open, setOpen] = useState(false)
     const [defaultValues, setDefaultValues] = useState(undefined)
-    const [deleteItem] = useMutation(DELETE_ITEM)
-    const [category, setCategory] = useState(undefined)
-    const {loading, data} = useQuery(GET_CATEGORIES)
-
-    const options = useMemo(() => {
-        if (data?.getCategories) {
-            return data?.getCategories.map(category => {
-                return ({id: category.id, label: category.data.name})
-            })
-        }
-        return []
-    }, [data])
+    const [deleteItem] = useMutation(DELETE_INGREDIENT)
 
     return (
         <Grid
@@ -51,11 +27,10 @@ export default function Index(props) {
                 xs={12}
                 lg={12}
             >
-                <BgCard title="Ponuka">
+                <BgCard title="Ingrediencie">
                     <Typography>
-                        Jednoducho vytvorte nové jedlá a pridajte ich do relevantných kategórií. Týmto spôsobom
-                        zabezpečíte prehľadnosť a jednoduché objednávanie pre vás aj vašich zákazníkov, ktorí budú mať
-                        prístup k ponuke jedál prostredníctvom vášho webu alebo iných kanálov.
+                        Jednoducho vytvorte ingrediencie ktoré si vie zákazník pridať extra do objednávky alebo vy z
+                        toho vyskladajte jedlo vo Vašej ponuke.
                     </Typography>
                 </BgCard>
             </Grid>
@@ -65,34 +40,12 @@ export default function Index(props) {
                 lg={12}
             >
                 <BgCard>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            width: '100%',
-                            pb: .5,
+                    <CreateNewButton
+                        onClick={() => {
+                            setDefaultValues(undefined)
+                            setOpen(true)
                         }}
-                    >
-                        <Box>
-                            <Autocomplete
-                                loading={loading}
-                                options={loading ? [] : options}
-                                onChange={(e, data) => setCategory(data)}
-                                value={category}
-                                sx={{
-                                    width: 200,
-                                }}
-                                renderInput={(params) => <TextField {...params} label={'Kategória'} />}
-                            />
-                        </Box>
-                        <CreateNewButton
-                            onClick={() => {
-                                setDefaultValues(undefined)
-                                setOpen(true)
-                            }}
-                        />
-                    </Box>
+                    />
                     <Table
                         sx={{
                             mt: 1,
@@ -102,10 +55,8 @@ export default function Index(props) {
                         <TableHead>
                             <TableRow>
                                 <StyledTableCell text={'Názov'} />
-                                <StyledTableCell text={'Stav'} />
-                                <StyledTableCell text={'Kategória'} />
-                                <StyledTableCell text={'Váha/Objem'} />
-                                <StyledTableCell text={'Cena'} />
+                                <StyledTableCell text={'Môže byť extra'} />
+                                <StyledTableCell text={'Extra cena'} />
                                 <StyledTableCell
                                     text={'Akcie'}
                                     width={200}
@@ -113,8 +64,8 @@ export default function Index(props) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {props.items?.filter(item => category ? item.data.category.id === category.id : true).map((item) => (
-                                <TableRow key={item.data.name}>
+                            {props.ingredients.map(item =>
+                                <TableRow key={item.name}>
                                     <TableCell>
                                         <Typography
                                             sx={{
@@ -122,7 +73,7 @@ export default function Index(props) {
                                                 fontWeight: '500',
                                             }}
                                         >
-                                            {item.data.name}
+                                            {item.name}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -132,7 +83,7 @@ export default function Index(props) {
                                                 fontWeight: '500',
                                             }}
                                         >
-                                            <StateChip state={item.data.state} />
+                                            {item.canBeExtra ? 'Áno' : 'Nie'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -142,27 +93,7 @@ export default function Index(props) {
                                                 fontWeight: '500',
                                             }}
                                         >
-                                            {item.data.category.data?.name}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '16px',
-                                                fontWeight: '500',
-                                            }}
-                                        >
-                                            {item.data.weight}&nbsp;{item.data.liquid ? 'ml' : 'g'}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '16px',
-                                                fontWeight: '500',
-                                            }}
-                                        >
-                                            {item.data.price} €
+                                            {item.canBeExtra ? item.extraPrice + ' €' : '-'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -180,18 +111,18 @@ export default function Index(props) {
                                                 }
                                             }}
                                             onEdit={() => {
-                                                setDefaultValues({id: item.id, ...item.data})
+                                                setDefaultValues(item)
                                                 setOpen(true)
                                             }}
                                         />
                                     </TableCell>
-                                </TableRow>
-                            ))}
+                                </TableRow>,
+                            )}
                         </TableBody>
                     </Table>
                 </BgCard>
             </Grid>
-            <ItemFormDialog
+            <IngredientFormDialog
                 setDefaultValues={setDefaultValues}
                 setOpen={setOpen}
                 open={open}
@@ -203,12 +134,12 @@ export default function Index(props) {
 
 export const getServerSideProps = withAuthentication(async ({token}) => {
     const {data} = await createApolloClient(token ?? '').query({
-        query: GET_ITEMS,
+        query: GET_INGREDIENTS,
     })
 
     return {
         props: {
-            items: data.getItems,
+            ingredients: data.getIngredients,
         },
     }
 })

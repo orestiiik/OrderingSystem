@@ -92,18 +92,6 @@ export default function Index(props) {
                                 xs={12}
                             >
                                 <Typography
-                                    fontSize={22}
-                                    pb={2}
-                                >
-                                    username: admin <br/>
-                                    password: admin123
-                                </Typography>
-                            </Grid>
-                            <Grid
-                                item
-                                xs={12}
-                            >
-                                <Typography
                                     fontSize={26}
                                     color="secondary"
                                     fontWeight={600}

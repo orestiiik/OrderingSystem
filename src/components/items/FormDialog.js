@@ -10,6 +10,7 @@ import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import {useRouter} from 'next/router'
 import {requiredField} from '../../config/validationMessages'
+import {GET_INGREDIENTS} from '../../gql/igredients'
 
 const schema = yup.object().shape({
     name: yup.string().required(requiredField('Názov')),
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 
 const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
     const {loading, data} = useQuery(GET_CATEGORIES)
+    const {loading: loadingIng, data: dataIng} = useQuery(GET_INGREDIENTS)
     const router = useRouter()
 
     const options = useMemo(() => {
@@ -32,13 +34,25 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
         return []
     }, [data])
 
+    const optionsIngredients = useMemo(() => {
+        if (dataIng?.getIngredients) {
+            return dataIng?.getIngredients.map(ingredient => {
+                return ({
+                    id: ingredient.id,
+                    label: ingredient.name,
+                })
+            })
+        }
+        return []
+    }, [dataIng])
+
     const {control, handleSubmit, reset, formState: {errors}} = useForm({
         resolver: yupResolver(schema),
     })
     const [createItem] = useMutation(CREATE_ITEM)
     const [updateItem] = useMutation(UPDATE_ITEM)
     const onSubmit = async (data) => {
-        const {name, weight, liquid, category: {id: category}, price, state} = data
+        const {name, weight, liquid, category: {id: category}, ingredients, price, state} = data
 
         const formattedWeight = parseFloat(weight)
         const formattedPrice = parseFloat(price)
@@ -56,6 +70,7 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                                 category,
                                 price: formattedPrice,
                                 state: state?.value,
+                                ingredients: ingredients.map(item => item.id)
                             },
                         },
                     },
@@ -70,6 +85,7 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                             category,
                             price: formattedPrice,
                             state: state?.value,
+                            ingredients: ingredients.map(item => item.id)
                         },
                     },
                 })
@@ -135,7 +151,10 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                         label={'Názov'}
                     />)}
                 />
-                {errors.name && <Typography color={'error'} pt={.3}>{errors.name.message}</Typography>}
+                {errors.name && <Typography
+                    color={'error'}
+                    pt={.3}
+                >{errors.name.message}</Typography>}
             </Grid>
             <Grid
                 item
@@ -156,7 +175,35 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                             renderInput={(params) => <TextField {...params} label={'Kategória'} />}
                         />)}
                 />
-                {errors.category && <Typography color={'error'} pt={.3}>{errors.category.message}</Typography>}
+                {errors.category && <Typography
+                    color={'error'}
+                    pt={.3}
+                >{errors.category.message}</Typography>}
+            </Grid>
+            <Grid
+                item
+                xs={12}
+                pb={2}
+            >
+                <Controller
+                    name={'ingredients'}
+                    control={control}
+                    defaultValue={defaultValues?.ingredients ? defaultValues.ingredients : {}}
+                    render={({field: {onChange, value}}) => (
+                        <Autocomplete
+                            loading={loadingIng}
+                            options={loadingIng ? [] : optionsIngredients}
+                            onChange={(e, data) => onChange(data)}
+                            value={value}
+                            fullWidth
+                            multiple
+                            renderInput={(params) => <TextField {...params} label={'Ingrediencie'} />}
+                        />)}
+                />
+                {errors.ingredients && <Typography
+                    color={'error'}
+                    pt={.3}
+                >{errors.ingredients.message}</Typography>}
             </Grid>
             <Grid
                 item
@@ -175,7 +222,10 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                         label={'g/ml'}
                     />)}
                 />
-                {errors.weight && <Typography color={'error'} pt={.3}>{errors.weight.message}</Typography>}
+                {errors.weight && <Typography
+                    color={'error'}
+                    pt={.3}
+                >{errors.weight.message}</Typography>}
             </Grid>
             <Grid
                 item
@@ -195,7 +245,10 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                         renderInput={(params) => <TextField {...params} label={'Stav'} />}
                     />)}
                 />
-                {errors.state && <Typography color={'error'} pt={.3}>{errors.state.message}</Typography>}
+                {errors.state && <Typography
+                    color={'error'}
+                    pt={.3}
+                >{errors.state.message}</Typography>}
             </Grid>
             <Grid
                 item
@@ -234,7 +287,10 @@ const ItemFormDialog = ({setOpen, open, defaultValues, setDefaultValues}) => {
                         label={'Cena'}
                     />)}
                 />
-                {errors.price && <Typography color={'error'} pt={.3}>{errors.price.message}</Typography>}
+                {errors.price && <Typography
+                    color={'error'}
+                    pt={.3}
+                >{errors.price.message}</Typography>}
             </Grid>
             <Grid
                 item

@@ -29,12 +29,12 @@ export const StateChip = ({state}) => (
             sx={{
                 pl: '4px',
                 pr: '4px',
-                backgroundColor: states.find(item => item.value === state).color,
+                backgroundColor: states.find(item => item.value === state)?.color,
                 fontWeight: 600,
                 color: '#fff',
             }}
             size="medium"
-            label={states.find(item => item.value === state).label}
+            label={states.find(item => item.value === state)?.label}
         />
         : (state
                 ? <Box
@@ -52,30 +52,30 @@ export const StateChip = ({state}) => (
                             color: '#fff',
                         }}
                         size="medium"
-                        label={states.find(item => item.value === 'active').label}
+                        label={states.find(item => item.value === 'active')?.label}
                     />
                     <Chip
                         sx={{
                             pl: '4px',
                             pr: '4px',
-                            backgroundColor: states.find(item => item.value === state).color,
+                            backgroundColor: states.find(item => item.value === state)?.color,
                             fontWeight: 600,
                             color: '#fff',
                         }}
                         size="medium"
-                        label={states.find(item => item.value === state).label}
+                        label={states.find(item => item.value === state)?.label}
                     />
                 </Box>
                 : <Chip
                     sx={{
                         pl: '4px',
                         pr: '4px',
-                        backgroundColor: states.find(item => item.value === 'active').color,
+                        backgroundColor: states.find(item => item.value === 'active')?.color,
                         fontWeight: 600,
                         color: '#fff',
                     }}
                     size="medium"
-                    label={states.find(item => item.value === 'active').label}
+                    label={states.find(item => item.value === 'active')?.label}
                 />
         )
 )

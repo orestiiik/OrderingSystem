@@ -13,6 +13,12 @@ export const GET_ITEMS = gql`
                         active
                     }
                 }
+                ingredients {
+                    id
+                    name
+                    canBeExtra
+                    extraPrice
+                }
                 price
                 weight
                 liquid
@@ -35,6 +41,12 @@ export const GET_ITEM_BY_ID = gql`
                         active
                     }
                 }
+                ingredients {
+                    id
+                    name
+                    canBeExtra
+                    extraPrice
+                }
                 price
                 weight
                 liquid
@@ -56,6 +68,9 @@ export const CREATE_ITEM = gql`
                         name
                         active
                     }
+                }
+                ingredients {
+                    id
                 }
                 price
                 weight
